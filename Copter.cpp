@@ -11,7 +11,7 @@
 #include <windows.h>
 
 /* Jogo copter elaborado por Gustavo Melo Poppi da UNICESUMAR, do curso
-de Análise e Desenvolvimento de Sistemas no 2ºSemestre. Ano de 2019 */
+de Análise e Desenvolvimento de Sistemas no 2ºSemestre. Ano de 2019  */
 
 
 int lin = 16, col = 13, record = 0, pontuacao = 0;
