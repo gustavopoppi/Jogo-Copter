@@ -28,7 +28,7 @@ int  x, y;
 
 
 /* Variaveis a respeito da barreira */
-int velocidadeBarreira = 2; 
+int velocidadeBarreira = 50; 
 
 
 /* Variaveis a respeito do background */
@@ -67,7 +67,8 @@ void background(int alturaInicia){
          // implementar um novo cenário de fundo, sem ser apenas uma reta
          /*gotoxy(6,5); printf("\\");
          gotoxy(7,5); printf("_/");*/
-     }     
+     }    
+     
 }
 
 //----------------------------------------------------------------------
@@ -75,15 +76,18 @@ void barreira(int barreiraX, int barreiraY){
      int col1,col2,col3;
      // acrescentar mais tipos de barreiras e colocar como switch.. case(0),  case(1)
      
-     if ((y > sorteio) && (y + 2 < (25-sorteio-linhaBaixo))){ // Condições para estar dentro do "mapa"
+     textcolor(7); // cor branca
+     if ((y > sorteio) && (y + 2 < (25-sorteio-linhaBaixo-1))){ // Condições para estar dentro do "mapa"
          gotoxy(x,y);   printf(" _");
-         gotoxy(x,y+1); printf("| |");
-         gotoxy(x,y+2); printf("|_|");
+         //gotoxy(x,y+1); printf("| |");
+         //gotoxy(x,y+2); printf("|_|");
      }else{
          sorteiaAltura();  
      }
 
-     x = x - velocidadeBarreira;
+     // Faz a barreira andar da direita para a esquerda
+     x --;
+
      
      // Se o valor do X for menor que 0 ele passa fora da tela
      if (x<1){
@@ -94,27 +98,73 @@ void barreira(int barreiraX, int barreiraY){
 //----------------------------------------------------------------------
 bool colisao(){
      
-     if (((col+2) >= y) && (col <= (y+2) && ((lin+12) == x)))
+     // lin é a linha do helicóptero
+     // col é a coluna do helicóptero
+     // x é o valor sorteado no plano X (comprimento)
+     // y é o valor sorteado no plano Y (altura)
+     
+     if ((x >= lin) && (x <= (lin+9)) && (y >= col) && (y <= (col+2)))
          return true;
      else
          return false;
+
 }
 
 //----------------------------------------------------------------------
 void desenhoHelicop(int linha , int coluna){
 
-    textcolor(2);
-    textbackground(1);    
-    clrscr();
-    gotoxy(linha,coluna);   printf("   __________");
+    textbackground(9);// cor azul clara  
+
+    clrscr();// limpa a tela
+    gotoxy(linha,coluna);   printf("   ________");
     gotoxy(linha,coluna+1); printf("x____.-'-.");
     gotoxy(linha,coluna+2); printf("\"\"___.____)");
+}
+
+// pinta a tela de verde
+void telaVerde(int alturaInicia){
+    // laço de repetição onde o y vai até ser igual o número inicial da altura
+    // e o x eu fiz para percorrer cada valor de linha, onde vai de 1 até 80 (tela 80x25)
+    // de cima
+    for (int y = 2; y <= alturaInicia; y++){
+        for (int x = 1; x <= 80; x++){
+            gotoxy(x,y);
+            textbackground(2); 
+            textcolor(2);
+            printf("'");
+        }
+    }
+    for (int x = 1; x<=80; x++){
+              gotoxy(x,1);
+              textbackground(2); 
+              textcolor(2);
+              printf("'");
+    }
+
+    
+    // de baixo
+    for (int x = 1; x < 69; x++){
+        gotoxy(x,(25-alturaInicia-linhaBaixo));
+        textbackground(2); 
+        textcolor(2);
+        printf("'");
+    }
+    
+    for (int y = 25; y >= (25-alturaInicia-linhaBaixo+1); y--){
+        for (int x = 1; x <= 80; x++){
+            gotoxy(x,y);
+            textbackground(2); 
+            textcolor(2);
+            printf("'");
+       }
+    }
+
 }
 
 int main(){
     // X = 80
     // Y = 25   
-    //system("mode 80,25");             
+    system("mode 80,25");             
     srand(time(NULL));
     tecla = 0;
     
@@ -132,16 +182,21 @@ int main(){
     sorteiaAltura();
     
     
-    do{    
-        desenhoHelicop(lin,col);  
-        printf("%d",lin);     
-        printf("%d",col);         
-        printf(" %d",y);         
-        printf(" %d",x);
-             
+    do{ 
+        desenhoHelicop(lin,col); 
         background(sorteio);
+
+        //telaVerde(sorteio);
+        
+        //printf("%d",lin);     
+        //printf("%d",col);         
+        //printf(" %d",y);         
+        //printf(" %d",x); 
+        //printf(" %d",colisao());
+             
+        
         barreira(x,y);
-        Sleep(100);
+        Sleep(velocidadeBarreira);
         // printf("%d\n",x);        
         // printf("%d\n",y);
         
@@ -149,8 +204,7 @@ int main(){
         // printf("%d\n",tecla);
        
         if (colisao()==true){
-            printf("GAMEOVER");
-            scanf("");
+            system("pause");
         }
         
         if (kbhit()){
@@ -161,6 +215,7 @@ int main(){
               
               if(tecla == 72){ // helicóptero vai para cima
                  col = col - 1;
+                 //system("pause");
               }
               
               if (tecla == 80){
