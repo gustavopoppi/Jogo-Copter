@@ -79,8 +79,8 @@ void barreira(int barreiraX, int barreiraY){
      textcolor(7); // cor branca
      if ((y > sorteio) && (y + 2 < (25-sorteio-linhaBaixo-1))){ // Condições para estar dentro do "mapa"
          gotoxy(x,y);   printf(" _");
-         //gotoxy(x,y+1); printf("| |");
-         //gotoxy(x,y+2); printf("|_|");
+         gotoxy(x,y+1); printf("| |");
+         gotoxy(x,y+2); printf("|_|");
      }else{
          sorteiaAltura();  
      }
@@ -98,16 +98,26 @@ void barreira(int barreiraX, int barreiraY){
 //----------------------------------------------------------------------
 bool colisao(){
      
-     // lin é a linha do helicóptero
-     // col é a coluna do helicóptero
      // x é o valor sorteado no plano X (comprimento)
      // y é o valor sorteado no plano Y (altura)
+     // lin é a linha do helicóptero
+     // col é a coluna do helicóptero
      
-     if ((x >= lin) && (x <= (lin+9)) && (y >= col) && (y <= (col+2)))
-         return true;
+     if ((x >= lin) && (x <= (lin+9)))
+     {
+        if (((y >= col) && (y <= (col+4))) || (col >= y && (col) <= y+2))
+        {
+            return true;
+        }    
      else
-         return false;
-
+        return false;
+     }   
+    // if  ((x >= lin) && (x <= (lin+9)) && (col >= x) && (col <= (y+2)))  
+//         return true;
+//     else
+//         return false;
+         // col >= x && col <= y+
+         
 }
 
 //----------------------------------------------------------------------
@@ -188,10 +198,11 @@ int main(){
 
         //telaVerde(sorteio);
         
-        //printf("%d",lin);     
-        //printf("%d",col);         
-        //printf(" %d",y);         
-        //printf(" %d",x); 
+        printf(" %d ",lin);     
+        printf(" %d ",col);         
+        printf(" %d",x);         
+        printf(" %d",y); 
+
         //printf(" %d",colisao());
              
         
