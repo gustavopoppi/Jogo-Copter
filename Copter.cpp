@@ -77,7 +77,9 @@ void barreira(int barreiraX, int barreiraY){
      // acrescentar mais tipos de barreiras e colocar como switch.. case(0),  case(1)
      
      textcolor(7); // cor branca
-     if ((y > sorteio) && (y + 2 < (25-sorteio-linhaBaixo-1))){ // Condições para estar dentro do "mapa"
+     
+     // Condições para estar dentro do "mapa"
+     if ((y > sorteio) && (y + 2 < (25-sorteio-linhaBaixo-1))){ 
          gotoxy(x,y);   printf(" _");
          gotoxy(x,y+1); printf("| |");
          gotoxy(x,y+2); printf("|_|");
@@ -105,7 +107,7 @@ bool colisao(){
      
      if ((x >= lin) && (x <= (lin+9)))
      {
-        if (((y >= col) && (y <= (col+4))) || (col >= y && (col) <= y+2))
+        if (((y >= col) && (y <= (col+2))) || (col >= y && (col) <= y+2))
         {
             return true;
         }    
@@ -129,6 +131,10 @@ void desenhoHelicop(int linha , int coluna){
     gotoxy(linha,coluna);   printf("   ________");
     gotoxy(linha,coluna+1); printf("x____.-'-.");
     gotoxy(linha,coluna+2); printf("\"\"___.____)");
+}
+
+void encerrarJogo(){
+    system("pause");   
 }
 
 // pinta a tela de verde
@@ -193,15 +199,16 @@ int main(){
     
     
     do{ 
+                
         desenhoHelicop(lin,col); 
         background(sorteio);
 
         //telaVerde(sorteio);
         
-        printf(" %d ",lin);     
-        printf(" %d ",col);         
-        printf(" %d",x);         
-        printf(" %d",y); 
+        //printf(" %d ",lin);     
+        //printf(" %d ",col);         
+        //printf(" %d",x);         
+        //printf(" %d",y); 
 
         //printf(" %d",colisao());
              
@@ -215,9 +222,13 @@ int main(){
         // printf("%d\n",tecla);
        
         if (colisao()==true){
-            system("pause");
+            encerrarJogo();
         }
         
+        // Se o helicóptero encostas em alguma das linhas, encerra o jogo
+        if (!(col > sorteio) || !(col + 2 < (26-sorteio-linhaBaixo-1)))
+            encerrarJogo();
+            
         if (kbhit()){
            tecla = getch();
            if (tecla == 224){
@@ -226,7 +237,6 @@ int main(){
               
               if(tecla == 72){ // helicóptero vai para cima
                  col = col - 1;
-                 //system("pause");
               }
               
               if (tecla == 80){
