@@ -57,8 +57,8 @@ void background(int alturaInicia){
      
      for (int x = 1; x<80; x++){
          
-         // linha da cima
-         gotoxy(x,alturaInicia); printf("_");
+         // linha da cima, o +1 é para nunca começar com a linha tamanho 1, pois se não irá ter conflito com o texto
+         gotoxy(x,alturaInicia+1); printf("_");
          
          // linha de baixo, onde 25 é a altura máxima
          gotoxy(x,(25-alturaInicia-linhaBaixo)); printf("_");
@@ -120,6 +120,15 @@ bool colisao(){
 //         return false;
          // col >= x && col <= y+
          
+}
+
+//----------------------------------------------------------------------
+void EscritaPontuacaoRecord(){
+
+    gotoxy(1,1); printf("Player:");
+    gotoxy(40,1); printf("Pontuação: %d",pontuacao);
+    gotoxy(60,1); printf("Record: %d",record);    
+    
 }
 
 //----------------------------------------------------------------------
@@ -202,6 +211,7 @@ int main(){
                 
         desenhoHelicop(lin,col); 
         background(sorteio);
+        EscritaPontuacaoRecord();
 
         //telaVerde(sorteio);
         
