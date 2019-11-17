@@ -10,18 +10,17 @@
 
 /* Coisas a fazer
 
-   Validações:
-       - Helicoptero não pode passar por cima da barreira e do background;
-       - Barreira não pode sair em cima do background;
-       
-
+   Telas:
+         - Tela de entrada ( Jogo Copter -> Desenvolvido por...), fica uns 3 segundos na tela e redireciona para segunda tela
+         - Segunda tela é a tela de Menu (Jogar, Como Jogar, Créditos), um extra é deixar escolher a cor do helicóptero
+         -      
 */
 
 /* Jogo copter elaborado por Gustavo Melo Poppi da UNICESUMAR, do curso
 de Análise e Desenvolvimento de Sistemas no 2ºSemestre. Ano de 2019  */
 
 
-int lin = 16, col = 13, record = 0, pontuacao = 0;
+int lin = 16, col = 13, record = 500, pontuacao = 0;
 int mapaInicioCima, mapaInicioBaixo;
 int tecla;
 int  x, y;
@@ -35,8 +34,159 @@ int velocidadeBarreira = 50;
 bool zero;
 int sorteio, linhaBaixo;
 
+/* Variáveis a respeito da tela do carregando jogo */
+bool sair;
 
 
+
+//----------------------------------------------------------------------
+int TelaInicialCarregandoJogo(){
+     
+    do{
+        fflush(stdin);
+        sair = true;
+        int x = 14, y = 5;      
+        float PorcentagemCarregadoTelaInicial = 1;  
+        
+        // b = x, c = y
+        // b representa linha e c a coluna
+        int b = 1, c = 20;
+        
+        char situacao[14] = "";
+        
+        for (b = 0; b < 78; b++){
+            gotoxy(x,y);printf("         __    ______     ______    ______          \n");
+            gotoxy(x,y+1);printf("        |  |  /  __  \\   /  ____|  /   __ \\       \n");
+            gotoxy(x,y+2);printf("        |  | |  |  |  | |  |  __  |  |  |  |        \n");
+            gotoxy(x,y+3);printf("  .--.  |  | |  |  |  | |  | |_ | |  |  |  |        \n");
+            gotoxy(x,y+4);printf("  |  `--'  | |  `--'  | |  |__| | |  `--'  |        \n");
+            gotoxy(x,y+5);printf("   \\______/   \\______/   \\______|  \\______/     \n");
+            
+            gotoxy(x-4,y+6);printf("  ______   ______   .______   .__________. _______ .______   \n");
+            gotoxy(x-4,y+7);printf(" /      | /  __  \\  |   _  \\  |          | |   ____||   _  \\  \n");
+            gotoxy(x-4,y+8);printf("|  ,----'|  |  |  | |  |_)  | `---|  |---` |  |__   |  |_)  | \n");
+            gotoxy(x-4,y+9);printf("|  |     |  |  |  | |   ___/      |  |     |   __|  |      /  \n");
+            gotoxy(x-4,y+10);printf("|  `----.|  `--'  | |  |          |  |     |  |____ |  |\\  \\_.\n");
+            gotoxy(x-4,y+11);printf(" \\______| \\______/  | _|          |__|     |_______|| _| `.__|\n");
+            //gotoxy(x+19,y+13);printf("Carregando...\n");
+            
+            if (PorcentagemCarregadoTelaInicial < 100)
+                strcpy(situacao,"Carregando..."); 
+            else
+                strcpy(situacao,"Redirecionando...");
+            
+
+            gotoxy(x+21,y+13);printf("%s\n",situacao);
+            gotoxy(x+25,y+14);printf(" %.0f%% \n",PorcentagemCarregadoTelaInicial);
+            
+            PorcentagemCarregadoTelaInicial += 1.5;   
+            if (PorcentagemCarregadoTelaInicial>=101.5){
+                b = 79;
+                Sleep(500);
+                sair = false;
+            }
+        
+            gotoxy(b,c);   printf("   ________");
+            gotoxy(b,c+1); printf("x____.-'-.");
+            gotoxy(b,c+2); printf("\"\"___.____)");            
+        
+            
+            if (b > 72)
+                c = 19;
+            Sleep(90);         
+            clrscr();
+            tecla = 0;                        
+        }
+    }while(sair);   
+}  
+
+//----------------------------------------------------------------------
+bool EscolhaOpcaoMenuInicial(int opcaoEscolhida){
+
+    switch(opcaoEscolhida){
+    
+        case 12: // volta para o jogo
+            return sair = false;
+         break;
+        case 14: // vai para página de REGRAS
+            return 2;
+         break;
+        case 16: // vai para página de CRÉDITOS
+            return 3;
+         break;
+        default:
+        return false;  
+    }              
+}   
+    
+//----------------------------------------------------------------------
+int TelaMenuInicial(){
+    
+   
+    fflush(stdin);
+    sair = true;
+    
+    int b = 1, c = 20, tecla = 0, PosicaoSetaEscolha = 12;
+    //        int x = 14, y = 5; 
+ 
+    menuInicial:
+        clrscr();
+        
+        textcolor(15);
+        gotoxy(10,2);printf("  ______   ______   .______   .__________. _______ .______   \n");
+        gotoxy(10,3);printf(" /      | /  __  \\  |   _  \\  |          | |   ____||   _  \\  \n");
+        gotoxy(10,4);printf("|  ,----'|  |  |  | |  |_)  | `---|  |---` |  |__   |  |_)  | \n");
+        gotoxy(10,5);printf("|  |     |  |  |  | |   ___/      |  |     |   __|  |      /  \n");
+        gotoxy(10,6);printf("|  `----.|  `--'  | |  |          |  |     |  |____ |  |\\  \\_.\n");
+        gotoxy(10,7);printf(" \\______| \\______/  | _|          |__|     |_______|| _| `.__|\n");
+        
+        
+        gotoxy(33,PosicaoSetaEscolha);printf(">");
+        gotoxy(35,12);printf("Jogar\n");
+        gotoxy(35,14);printf("Regras\n");
+        gotoxy(35,16);printf("Créditos\n");
+    
+        gotoxy(11,23);printf("*Desenvolvido Por: Gustavo Melo Poppi, 2º Semestre de ADS\n");
+    
+    do{           
+        if (kbhit()){            
+            tecla = getch();    
+            //printf("%d",tecla);
+            if (tecla == 224){
+              tecla = getch(); 
+              //printf("%d",tecla);
+                                         
+              if (tecla == 72){ // 72 é a seta para CIMA
+                  if (PosicaoSetaEscolha == 12){ 
+                      PosicaoSetaEscolha = 16; // Validação se já estiver no primeiro menu de cima, ele vai direto para o ultimo
+                      goto menuInicial;
+                  }
+                  else{
+                      PosicaoSetaEscolha -= 2;
+                      goto menuInicial;
+                  }
+              }
+                 
+              if (tecla == 80){ // 80 é a seta para BAIXO
+                  if (PosicaoSetaEscolha == 16){ 
+                      PosicaoSetaEscolha = 12; // Validação se já estiver no ultimo menu de baixo, ele vai direto para o primeiro
+                      goto menuInicial;
+                  }
+                  else{  
+                      PosicaoSetaEscolha += 2;
+                      goto menuInicial;
+                  }
+              }   
+           }
+           
+           if (tecla == 13){
+               printf("%d",tecla);
+               EscolhaOpcaoMenuInicial(PosicaoSetaEscolha);    
+           }
+        }    
+    }while(sair);    
+}
+                                                                                                               
 //----------------------------------------------------------------------
 int sorteioNum(int var){
     
@@ -45,10 +195,11 @@ int sorteioNum(int var){
 }
 
 //----------------------------------------------------------------------
+// Sorteia de x (linha) e y (coluna). x = 78, pois é o valor inicio da direita para esquerda
 void sorteiaAltura(){
-     
+         
      x = 78;
-     y = (rand()%24)+1;          
+     y = (rand()%24)+1;       
 }
 
 //----------------------------------------------------------------------
@@ -72,29 +223,35 @@ void background(int alturaInicia){
 }
 
 //----------------------------------------------------------------------
-void barreira(int barreiraX, int barreiraY){
+void barreira(){
      int col1,col2,col3;
      // acrescentar mais tipos de barreiras e colocar como switch.. case(0),  case(1)
+    
      
-     textcolor(7); // cor branca
+     textcolor(15); // cor branca
      
      // Condições para estar dentro do "mapa"
      if ((y > sorteio) && (y + 2 < (25-sorteio-linhaBaixo-1))){ 
          gotoxy(x,y);   printf(" _");
          gotoxy(x,y+1); printf("| |");
          gotoxy(x,y+2); printf("|_|");
+         //teste = true;
+//         printf("%d",teste);
+//         Sleep(1000);
      }else{
+           //printf("%d",teste);
+//           Sleep(1000);
+//           teste=false;
          sorteiaAltura();  
      }
-
+     
      // Faz a barreira andar da direita para a esquerda
      x --;
-
      
      // Se o valor do X for menor que 0 ele passa fora da tela
-     if (x<1){
+     if (x < 1){
         sorteiaAltura();
-     }         
+     }    
 }
 
 //----------------------------------------------------------------------
@@ -104,7 +261,7 @@ bool colisao(){
      // y é o valor sorteado no plano Y (altura)
      // lin é a linha do helicóptero
      // col é a coluna do helicóptero
-     
+     int x, y ;
      if ((x >= lin) && (x <= (lin+9)))
      {
         if (((y >= col) && (y <= (col+2))) || (col >= y && (col) <= y+2))
@@ -127,8 +284,28 @@ void EscritaPontuacaoRecord(){
 
     gotoxy(1,1); printf("Player:");
     gotoxy(40,1); printf("Pontuação: %d",pontuacao);
-    gotoxy(60,1); printf("Record: %d",record);    
+    gotoxy(60,1); printf("Record: %d",record);
     
+    pontuacao = pontuacao + 3;
+    if (pontuacao >= record )
+       record = pontuacao;    
+    
+}
+
+//----------------------------------------------------------------------
+void ContagemRegressiva(){
+
+    bool sair = true;
+    
+    clrscr();
+    gotoxy(33,11); printf("Iniciando em:");
+    do{
+        for (int x = 3 ; x >= 1; x--){
+            gotoxy(39,12); printf("%d",x);   
+            Sleep(1000);
+        } 
+        sair = false;
+    }while(sair);      
 }
 
 //----------------------------------------------------------------------
@@ -142,53 +319,15 @@ void desenhoHelicop(int linha , int coluna){
     gotoxy(linha,coluna+2); printf("\"\"___.____)");
 }
 
+//----------------------------------------------------------------------
 void encerrarJogo(){
     system("pause");   
-}
-
-// pinta a tela de verde
-void telaVerde(int alturaInicia){
-    // laço de repetição onde o y vai até ser igual o número inicial da altura
-    // e o x eu fiz para percorrer cada valor de linha, onde vai de 1 até 80 (tela 80x25)
-    // de cima
-    for (int y = 2; y <= alturaInicia; y++){
-        for (int x = 1; x <= 80; x++){
-            gotoxy(x,y);
-            textbackground(2); 
-            textcolor(2);
-            printf("'");
-        }
-    }
-    for (int x = 1; x<=80; x++){
-              gotoxy(x,1);
-              textbackground(2); 
-              textcolor(2);
-              printf("'");
-    }
-
-    
-    // de baixo
-    for (int x = 1; x < 69; x++){
-        gotoxy(x,(25-alturaInicia-linhaBaixo));
-        textbackground(2); 
-        textcolor(2);
-        printf("'");
-    }
-    
-    for (int y = 25; y >= (25-alturaInicia-linhaBaixo+1); y--){
-        for (int x = 1; x <= 80; x++){
-            gotoxy(x,y);
-            textbackground(2); 
-            textcolor(2);
-            printf("'");
-       }
-    }
-
-}
+}  
 
 int main(){
     // X = 80
     // Y = 25   
+    setlocale (LC_ALL,"portuguese");
     system("mode 80,25");             
     srand(time(NULL));
     tecla = 0;
@@ -206,14 +345,16 @@ int main(){
     desenhoHelicop(lin,col); 
     sorteiaAltura();
     
+    TelaInicialCarregandoJogo();    
+    TelaMenuInicial();
+    
+    //ContagemRegressiva(); // Contagem antes de inicia o jogo
     
     do{ 
                 
         desenhoHelicop(lin,col); 
         background(sorteio);
         EscritaPontuacaoRecord();
-
-        //telaVerde(sorteio);
         
         //printf(" %d ",lin);     
         //printf(" %d ",col);         
@@ -223,7 +364,7 @@ int main(){
         //printf(" %d",colisao());
              
         
-        barreira(x,y);
+        barreira();
         Sleep(velocidadeBarreira);
         // printf("%d\n",x);        
         // printf("%d\n",y);

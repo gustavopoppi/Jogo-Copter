@@ -1,0 +1,53 @@
+diff a/Copter.cpp b/Copter.cpp	(rejected hunks)
+@@ -227,25 +227,41 @@
+      int col1,col2,col3;
+      // acrescentar mais tipos de barreiras e colocar como switch.. case(0),  case(1)
+      
+-     textcolor(7); // cor branca
++    // bool teste;
++//     int x = 78; // valor inicial linha da direita para esquerda
++//     int y = sorteiaAltura();
++     printf("%d",y);
++     printf("%d",x);
++     printf("%d",barreiraX);
+      
++     textcolor(15); // cor branca
++     do{
+      // Condi��es para estar dentro do "mapa"
+-     if ((y > sorteio) && (y + 2 < (25-sorteio-linhaBaixo-1))){ 
+-         gotoxy(x,y);   printf(" _");
+-         gotoxy(x,y+1); printf("| |");
+-         gotoxy(x,y+2); printf("|_|");
++     if ((barreiraY > sorteio) && (barreiraY + 2 < (25-sorteio-linhaBaixo-1))){ 
++         gotoxy(barreiraX,barreiraY);   printf(" _");
++         gotoxy(barreiraX,barreiraY+1); printf("| |");
++         gotoxy(barreiraX,barreiraY+2); printf("|_|");
++         //teste = true;
++//         printf("%d",teste);
++//         Sleep(1000);
+      }else{
++           //printf("%d",teste);
++//           Sleep(1000);
++//           teste=false;
+          sorteiaAltura();  
+      }
+-
++     
+      // Faz a barreira andar da direita para a esquerda
+      x --;
+-
++     barreiraX--;
+      
+      // Se o valor do X for menor que 0 ele passa fora da tela
+-     if (x<1){
+-        sorteiaAltura();
+-     }         
++     //if (barreiraX < 1){
++//        y = sorteiaAltura();
++//     }     
++       clrscr();
++     Sleep(velocidadeBarreira);
++     }while(barreiraX>1);    
+ }
+ 
+ //----------------------------------------------------------------------
