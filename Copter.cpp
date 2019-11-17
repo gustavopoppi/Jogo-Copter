@@ -348,7 +348,7 @@ int main(){
     TelaInicialCarregandoJogo();    
     TelaMenuInicial();
     
-    //ContagemRegressiva(); // Contagem antes de inicia o jogo
+    ContagemRegressiva(); // Contagem antes de inicia o jogo
     
     do{ 
                 
