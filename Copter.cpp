@@ -11,20 +11,22 @@
 
 /* Declaração das minhas funções e/ou métodos!!*/
 
-
+void ConfiguracoesIniciais(bool primeiraVez);
 int TelaInicialCarregandoJogo();
 int TelaMenuInicial();
 int TelaRegras();
+int TelaCreditos();
 bool EscolhaOpcaoMenuInicial(int opcaoEscolhida);
 int SorteioNum(int var);
 void RedirecionamentoTelasPelaTeclaDigitada(int tecla);
 void SetarCorFundo(int corDeFundo);
 void sorteiaAltura();
 void Background(int alturaInicia);
-void barreira();
-void barreira2();
+void Barreira(bool reniciarBarreira);
+void Barreira2(bool reiniciarBarreira);
 bool colisao();
-void EscritaPontuacaoRecord();
+int ZerarPontuacao(int pontuacao);
+void EscritaPontuacaoRecord(bool zerarPontuacao);
 void ContagemRegressiva(int posicaoX, int posicaoY, char msg[50], bool contagemRegressiva,int tempoSairDaTela);
 void desenhoHelicop(int linha , int coluna);
 void IniciarJogo();
@@ -64,27 +66,16 @@ bool nuncasair = true;
 
 
 int main(){
+        
+    ConfiguracoesIniciais(true);    
     
-    SetarCorFundo(9);
-    // X = 80
-    // Y = 25   
-    setlocale (LC_ALL,"portuguese");
-    system("mode 80,25");             
-    srand(time(NULL));
-    tecla = 0;
-    
-    TelaInicialCarregandoJogo();    
-    TelaMenuInicial();
-    
-    ContagemRegressiva(33,11,"Iniciando em:",true,0); // Contagem antes de inicia o jogo
-    
-    IniciarJogo();
+    //IniciarJogo();
     
     do{ 
                 
         desenhoHelicop(lin,col); 
         Background(sorteio);
-        EscritaPontuacaoRecord();
+        EscritaPontuacaoRecord(false);
         
         //printf(" %d ",lin);     
         //printf(" %d ",col);         
@@ -94,9 +85,9 @@ int main(){
         //printf(" %d",colisao());
              
         
-        barreira();
+        Barreira(false);
         if (x <= 39 || w < 78)
-            barreira2();
+            Barreira2(false);
         Sleep(velocidadeBarreira);
         // printf("%d\n",x);        
         // printf("%d\n",y);
@@ -106,13 +97,26 @@ int main(){
        
         if (colisao()==true){
             Sleep(500);
-            SetarCorFundo(14); // 14 é a cor amarela           
+            SetarCorFundo(0); // 14 é a cor amarela     
+           // lin = 16;
+//            col = 13; 
+//            record = 500;
+//            pontuacao = 0;
+            EscritaPontuacaoRecord(true);      
             EncerrarJogo();
         }
         
         // Se o helicóptero encostar em alguma das linhas, encerra o jogo
-        if (!(col > sorteio) || !(col + 2 < (26-sorteio-linhaBaixo-1)))
+        if (!(col > sorteio) || !(col + 2 < (26-sorteio-linhaBaixo-1))){
+            Sleep(500);
+            SetarCorFundo(0); // 14 é a cor amarela    
+            lin = 16;
+            col = 13; 
+            record = 500;
+            pontuacao = 0; 
+            EscritaPontuacaoRecord(true);      
             EncerrarJogo();
+        }
             
         if (kbhit()){
            tecla = getch();
@@ -134,6 +138,78 @@ int main(){
     // system("pause");
     return(0);
 }
+
+//----------------------------------------------------------------------
+void ConfiguracoesIniciais(bool primeiraVez){
+
+    SetarCorFundo(9);
+    // X = 80
+    // Y = 25   
+    setlocale (LC_ALL,"portuguese");
+    system("mode 80,25");             
+    srand(time(NULL));
+    tecla = 0;
+    
+    if (primeiraVez == true)
+        TelaInicialCarregandoJogo();    
+        
+    TelaMenuInicial();
+}
+
+//----------------------------------------------------------------------
+void IniciarJogo(){    
+        
+    SetarCorFundo(9);// azul claro
+    
+    Barreira(true);
+    Barreira2(true);    
+    // sorteio da altura da Barreira inicial (Background), onde ela não pode ser igual a 0
+    do{
+        zero = false;
+        SorteioNum(4);
+        if (sorteio == 0){
+            zero = true;
+        }        
+    }while(zero);    
+    linhaBaixo = rand()%2; // só para linha de baixo não ficar igual a de cima.    
+    
+    desenhoHelicop(lin,col); 
+    //sorteiaAltura(); // sortear a altura INICIAL das Barreiras
+}
+
+//----------------------------------------------------------------------
+void EncerrarJogo(){
+     
+    int comprimento = 17, altura = 6; 
+     
+    clrscr(); 
+    textcolor(4);
+    gotoxy(comprimento,altura);printf("  _______      ___      .___  ___.  _______ \n");
+    gotoxy(comprimento,altura+1);printf(" /  _____|    /   \\     |   \\/   | |   ____|\n");
+    gotoxy(comprimento,altura+2);printf("|  |         /     \\    |        | |  |__   \n");
+    gotoxy(comprimento,altura+3);printf("|  |  __    /   ^   \\   |  \\  /  | |   __|  \n");
+    gotoxy(comprimento,altura+4);printf("|  | |_ |  /   /_\\   \\  |  |\\/|  | |  |____     \n");
+    gotoxy(comprimento,altura+5);printf(" \\______| /___/   \\___\\ |__|  |__| |_______|\n");
+     
+    gotoxy(comprimento,altura+6);printf("  ______   ____    ____  _______ .______\n");
+    gotoxy(comprimento,altura+7);printf(" /  __  \\  \\   \\  /   / |   ____||   _  \\ \n");
+    gotoxy(comprimento,altura+8);printf("|  |  |  |  \\   \\/   /  |  |__   |  |_)  |\n");
+    gotoxy(comprimento,altura+9);printf("|  |  |  |   \\      /   |   __|  |      /  \n");
+    gotoxy(comprimento,altura+10);printf("|  `--'  |    \\    /    |  |____ |  |\\  \\_\n");
+    gotoxy(comprimento,altura+11);printf(" \\______/      \\__/     |_______|| _| `.__|\n");
+    gotoxy(comprimento+18,altura+13);printf(" Aguarde.\n");
+    
+    Sleep(1000); 
+     
+    ContagemRegressiva(25, 11,"Redirecionando ao Menu Principal...", false, 1500);    
+    
+    Barreira(true);
+    Barreira2(true);
+    TelaMenuInicial();
+    
+    //Sleep(15000);
+//    system("pause");  
+} 
 
 
 //----------------------------------------------------------------------
@@ -221,7 +297,7 @@ int TelaMenuInicial(){
         gotoxy(35,14);printf("Regras\n");
         gotoxy(35,16);printf("Créditos\n");
     
-        gotoxy(11,23);printf("*Desenvolvido Por: Gustavo Melo Poppi, 2º Semestre de ADS\n");
+        gotoxy(11,23);printf("*Desenvolvido por: Gustavo Melo Poppi, 2º Semestre de ADS\n");
     
     do{           
         if (kbhit()){            
@@ -254,7 +330,7 @@ int TelaMenuInicial(){
               }   
            }
            
-           if (tecla == 13){
+           if (tecla == 13){ // se der ENTER vai para a função 
                EscolhaOpcaoMenuInicial(PosicaoSetaEscolha);    
            }
         }    
@@ -267,7 +343,7 @@ int TelaRegras(){
     
     SetarCorFundo(9); // cor azul claro; 
     
-    int tecla = 0;
+    int tecla = 0, parar = 0;
     bool sair;
     
     do{
@@ -282,8 +358,8 @@ int TelaRegras(){
              
             textcolor(2);             
             gotoxy(comprimento+48,altura-2);printf("  ESC = Voltar\n");  
-            textcolor(2);  
-            gotoxy(comprimento+48,altura-1);printf("ENTER = Jogar\n");  
+            //textcolor(2);  
+            //gotoxy(comprimento+48,altura-1);printf("ENTER = Jogar\n");  
             
             textcolor(15);             
             gotoxy(comprimento-10,altura+1);printf("Teclas:\n");
@@ -317,6 +393,7 @@ int TelaRegras(){
             gotoxy(x,y);   printf("|_|");             
             
             gotoxy(12,24); printf("______________________________________________");
+            
                      
             
             if (cont != 6) // ele contar, hora q chegar em 5 ele irá parar. Isso é qndo o helicóptero chegar na posição certa na tela ele ficar parado.
@@ -331,29 +408,47 @@ int TelaRegras(){
                     x = 11; // para sair do laço
                     sair = false;     
                 }        
-            }  
-            
+            }              
             clrscr();
         }           
         
-    }while(sair);   
+    }while(sair);  
     
     RedirecionamentoTelasPelaTeclaDigitada(tecla);  
 } 
+
+//----------------------------------------------------------------------
+int TelaCreditos(){
+
+    int comprimento = 12, altura = 8;   
+
+    clrscr();
+    
+    gotoxy(comprimento,altura);  printf("Esse jogo foi baseado no Classic Copter Game para Android.\n");
+    gotoxy(comprimento,altura+2);printf("Jogo criado pelo aluno Gustavo Melo Poppi, do curso de  \n");
+    gotoxy(comprimento,altura+4);printf("Análise e Desenvolvimento de Sistemas, que foi ministrado\n");
+    gotoxy(comprimento,altura+6);printf("pelo Professor Edson Moreno na instituição UNICESUMAR, situada\n");
+    gotoxy(comprimento,altura+8);printf("na cidade de Maringá no estado do Paraná.\n");
+    gotoxy(comprimento,altura+12);printf("Esse projeto foi criado para obtenção parcial da nota\n");
+    gotoxy(comprimento,altura+12);printf("do 2º Semestre do curso do ano de 2019.\n");
+    gotoxy(comprimento,altura+14);printf("do ano de 2019.\n");
+
+}
 
 //----------------------------------------------------------------------
 bool EscolhaOpcaoMenuInicial(int opcaoEscolhida){
 
     switch(opcaoEscolhida){
     
-        case 12: // volta para o jogo
+        case 12: // 12 valor do X e volta para o jogo
+            ContagemRegressiva(33,11,"Iniciando em:",true,0); // Contagem antes de inicia o jogo
             return sair = false;
          break;
         case 14: // vai para página de REGRAS
             return TelaRegras();
          break;
         case 16: // vai para página de CRÉDITOS
-            return 3;
+            return TelaCreditos();
          break;
         default:
         return false;  
@@ -372,8 +467,8 @@ void RedirecionamentoTelasPelaTeclaDigitada(int tecla){
 
     switch(tecla){
         //case 13: // ENTER
-//            IniciarJogo();
-//            break;
+            //IniciarJogo();
+            //break;
         case 27: // ESC
             TelaMenuInicial();
             break; 
@@ -391,9 +486,9 @@ void SetarCorFundo(int corDeFundo){
 // Sorteia de x (linha) e y (coluna). x = 78, pois é o valor inicio da direita para esquerda
 void sorteiaAltura(){
          
-     x = 78, w = 78;
-     y = (rand()%24)+1;    
-     z = (rand()%24)+1;
+     //x = 78, w = 78;
+     //y = (rand()%24)+1;    
+//     z = (rand()%24)+1;
 }
 
 //----------------------------------------------------------------------
@@ -417,10 +512,7 @@ void Background(int alturaInicia){
 }
 
 //----------------------------------------------------------------------
-void barreira(){
-     int col1,col2,col3;
-     // acrescentar mais tipos de barreiras e colocar como switch.. case(0),  case(1)
-    
+void Barreira(bool reiniciarBarreira){    
      
      textcolor(15); // cor branca
      
@@ -430,21 +522,16 @@ void barreira(){
          gotoxy(x,y+1); printf("| |");
          gotoxy(x,y+2); printf("| |");
          gotoxy(x,y+3); printf("|_|");
-         //teste = true;
-//         printf("%d",teste);
-//         Sleep(1000);
-     }else{
-           //printf("%d",teste);
-//           Sleep(1000);
-//           teste=false;
-         y = (rand()%24)+1;  
+         
      }
+     else
+         y = (rand()%24)+1;  
      
-     // Faz a barreira andar da direita para a esquerda
+     // Faz a Barreira andar da direita para a esquerda
      x --;
      
      // Se o valor do X for menor que 0 ele passa fora da tela
-     if (x < 1){
+     if (x < 1 || reiniciarBarreira == true){
         x = 78;
         y = (rand()%24)+1;
         //sorteiaAltura();
@@ -452,7 +539,7 @@ void barreira(){
 }
 
 //----------------------------------------------------------------------
-void barreira2(){   
+void Barreira2(bool reiniciarBarreira){   
      
      textcolor(15); // cor branca
      
@@ -472,11 +559,11 @@ void barreira2(){
          z = (rand()%24)+1;  
      }
      
-     // Faz a barreira andar da direita para a esquerda
+     // Faz a Barreira andar da direita para a esquerda
      w --;
      
      // Se o valor do X for menor que 0 ele passa fora da tela
-     if (w < 1){
+     if (w < 1 || reiniciarBarreira == true){
         w = 78;
         z = (rand()%24)+1;
      }    
@@ -490,9 +577,9 @@ bool colisao(){
      // lin é a linha do helicóptero
      // col é a coluna do helicóptero
      
-     if ((x >= lin) && (x <= (lin+9)))
+     if ((x >= lin) && (x <= (lin+9))) // +9 pq é o comprimento do helicóptero
      {
-        if (((y >= col) && (y <= (col+3))) || (col >= y && (col) <= y+3))
+        if (((y >= col) && (y <= (col+2))) || (col >= y && (col) <= y+3))
        {
            return true;
        }    
@@ -502,24 +589,21 @@ bool colisao(){
      
      if ((w >= lin) && (w <= (lin+9)))
      {
-        if (((z >= col) && (z <= (col+3))) || (col >= z && (col) <= z+3))
+        if (((z >= col) && (z <= (col+2))) || (col >= z && (col) <= z+3))
        {
            return true;
        }    
      else
            return false;
-     } 
-    // if  ((x >= lin) && (x <= (lin+9)) && (col >= x) && (col <= (y+2)))  
-//         return true;
-//     else
-//         return false;
-         // col >= x && col <= y+
-         
+     }          
 }
 
 //----------------------------------------------------------------------
-void EscritaPontuacaoRecord(){
+void EscritaPontuacaoRecord(bool zerarPontuacao){
 
+    if (zerarPontuacao)
+        pontuacao = 0;
+        
     gotoxy(1,1); printf("Player:");
     gotoxy(40,1); printf("Pontuação: %d",pontuacao);
     gotoxy(60,1); printf("Record: %d",record);
@@ -534,6 +618,7 @@ void EscritaPontuacaoRecord(){
 void ContagemRegressiva(int posicaoX, int posicaoY, char msg[50], bool contagemRegressiva,int tempoSairDaTela){
 
     bool sair = true;
+    int x;
     
     clrscr();
     gotoxy(posicaoX,posicaoY); printf("%s",msg);
@@ -560,56 +645,4 @@ void desenhoHelicop(int linha , int coluna){
     gotoxy(linha,coluna+1); printf("x____.-'-.");
     gotoxy(linha,coluna+2); printf("\"\"___.____)");
 }
-
-//----------------------------------------------------------------------
-void IniciarJogo(){
-        
-    SetarCorFundo(9);// azul claro
-    // sorteio da altura da barreira inicial (Background), onde ela não pode ser igual a 0
-    do{
-        zero = false;
-        SorteioNum(4);
-        if (sorteio == 0){
-            zero = true;
-        }        
-    }while(zero);    
-    linhaBaixo = rand()%2; // só para linha de baixo não ficar igual a de cima.
-    
-    desenhoHelicop(lin,col); 
-    sorteiaAltura(); // sortear a altura INICIAL das barreiras
-   
-}
-
-//----------------------------------------------------------------------
-void EncerrarJogo(){
-     
-    int comprimento = 17, altura = 6; 
-     
-    clrscr(); 
-    textcolor(4);
-    gotoxy(comprimento,altura);printf("  _______      ___      .___  ___.  _______ \n");
-    gotoxy(comprimento,altura+1);printf(" /  _____|    /   \\     |   \\/   | |   ____|\n");
-    gotoxy(comprimento,altura+2);printf("|  |         /     \\    |        | |  |__   \n");
-    gotoxy(comprimento,altura+3);printf("|  |  __    /   ^   \\   |  \\  /  | |   __|  \n");
-    gotoxy(comprimento,altura+4);printf("|  | |_ |  /   /_\\   \\  |  |\\/|  | |  |____     \n");
-    gotoxy(comprimento,altura+5);printf(" \\______| /___/   \\___\\ |__|  |__| |_______|\n");
-     
-    gotoxy(comprimento,altura+6);printf("  ______   ____    ____  _______ .______\n");
-    gotoxy(comprimento,altura+7);printf(" /  __  \\  \\   \\  /   / |   ____||   _  \\ \n");
-    gotoxy(comprimento,altura+8);printf("|  |  |  |  \\   \\/   /  |  |__   |  |_)  |\n");
-    gotoxy(comprimento,altura+9);printf("|  |  |  |   \\      /   |   __|  |      /  \n");
-    gotoxy(comprimento,altura+10);printf("|  `--'  |    \\    /    |  |____ |  |\\  \\_\n");
-    gotoxy(comprimento,altura+11);printf(" \\______/      \\__/     |_______|| _| `.__|\n");
-    gotoxy(comprimento+18,altura+13);printf(" Aguarde.\n");
-    
-    Sleep(1000); 
-     
-    ContagemRegressiva(25, 11,"Redirecionando ao Menu Principal...", false, 1500);
-    
-    
-    TelaMenuInicial();
-    
-    //Sleep(15000);
-//    system("pause");  
-} 
 
