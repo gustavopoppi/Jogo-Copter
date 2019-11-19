@@ -1,3 +1,6 @@
+
+/* Bibliotecas usadas no projeto */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale.h>
@@ -7,7 +10,6 @@
 #include <time.h>
 #include <ctype.h>
 #include <windows.h>
-
 
 /* Declaração das minhas funções e/ou métodos!!*/
 
@@ -31,20 +33,14 @@ void ContagemRegressiva(int posicaoX, int posicaoY, char msg[50], bool contagemR
 void desenhoHelicop(int linha , int coluna);
 void IniciarJogo();
 void EncerrarJogo();
+void BotaoEsc(int comprimento, int altura, bool cor, int valorTextColor);
 
-
-/* Coisas a fazer
-
-   Telas:
-         - Tela de entrada ( Jogo Copter -> Desenvolvido por...), fica uns 3 segundos na tela e redireciona para segunda tela
-         - Segunda tela é a tela de Menu (Jogar, Como Jogar, Créditos), um extra é deixar escolher a cor do helicóptero
-         -      
-*/
 
 /* Jogo copter elaborado por Gustavo Melo Poppi da UNICESUMAR, do curso
 de Análise e Desenvolvimento de Sistemas no 2ºSemestre. Ano de 2019  */
 
 
+// Variáveis globais
 int lin = 16, col = 13, record = 500, pontuacao = 0;
 int mapaInicioCima, mapaInicioBaixo;
 int tecla;
@@ -63,66 +59,50 @@ int sorteio, linhaBaixo;
 bool sair;
 
 bool nuncasair = true;
+int AumentarVelocidade = 450;
 
 
 int main(){
-        
-    ConfiguracoesIniciais(true);    
-    
-    //IniciarJogo();
+
+    ConfiguracoesIniciais(true); 
     
     do{ 
                 
         desenhoHelicop(lin,col); 
         Background(sorteio);
-        EscritaPontuacaoRecord(false);
-        
-        //printf(" %d ",lin);     
-        //printf(" %d ",col);         
-        //printf(" %d",x);         
-        //printf(" %d",y); 
-
-        //printf(" %d",colisao());
-             
+        EscritaPontuacaoRecord(false);             
         
         Barreira(false);
         if (x <= 39 || w < 78)
             Barreira2(false);
-        Sleep(velocidadeBarreira);
-        // printf("%d\n",x);        
-        // printf("%d\n",y);
+        Sleep(velocidadeBarreira);  
         
-        //tecla = getch();
-        // printf("%d\n",tecla);
+        //if (contador > 78 && pontuacao > 800){
+        if (pontuacao >= AumentarVelocidade){
+            velocidadeBarreira = velocidadeBarreira - 4;
+            AumentarVelocidade += 450;
+        }        
        
         if (colisao()==true){
+            Beep(330,500);                
             Sleep(500);
             SetarCorFundo(0); // 14 é a cor amarela     
-           // lin = 16;
-//            col = 13; 
-//            record = 500;
-//            pontuacao = 0;
             EscritaPontuacaoRecord(true);      
             EncerrarJogo();
         }
         
         // Se o helicóptero encostar em alguma das linhas, encerra o jogo
-        if (!(col > sorteio) || !(col + 2 < (26-sorteio-linhaBaixo-1))){
+        if (!(col > sorteio) || !(col + 2 < (26-sorteio-linhaBaixo-1))){            
+            Beep(330,500); 
             Sleep(500);
-            SetarCorFundo(0); // 14 é a cor amarela    
-            lin = 16;
-            col = 13; 
-            record = 500;
-            pontuacao = 0; 
             EscritaPontuacaoRecord(true);      
             EncerrarJogo();
         }
             
         if (kbhit()){
            tecla = getch();
-           if (tecla == 224){
-              tecla = getch();
-              //teclas: 72 cima, 80 baixo
+           if (tecla == 224){              
+              tecla = getch(); //teclas: 72 cima, 80 baixo
               
               if(tecla == 72){ // helicóptero vai para cima
                  col = col - 1;
@@ -132,11 +112,8 @@ int main(){
                  col = col + 1; // helicóptero vai para baixo
               }
            }
-        }
-        
-    }while(tecla != 27); // tecla 27 = ESC
-    // system("pause");
-    return(0);
+        }        
+    }while(nuncasair);
 }
 
 //----------------------------------------------------------------------
@@ -205,10 +182,7 @@ void EncerrarJogo(){
     
     Barreira(true);
     Barreira2(true);
-    TelaMenuInicial();
-    
-    //Sleep(15000);
-//    system("pause");  
+    TelaMenuInicial(); 
 } 
 
 
@@ -296,6 +270,7 @@ int TelaMenuInicial(){
         gotoxy(35,12);printf("Jogar\n");
         gotoxy(35,14);printf("Regras\n");
         gotoxy(35,16);printf("Créditos\n");
+        gotoxy(35,18);printf("Sair\n");
     
         gotoxy(11,23);printf("*Desenvolvido por: Gustavo Melo Poppi, 2º Semestre de ADS\n");
     
@@ -309,7 +284,7 @@ int TelaMenuInicial(){
                                          
               if (tecla == 72){ // 72 é a seta para CIMA
                   if (PosicaoSetaEscolha == 12){ 
-                      PosicaoSetaEscolha = 16; // Validação se já estiver no primeiro menu de cima, ele vai direto para o ultimo
+                      PosicaoSetaEscolha = 18; // Validação se já estiver no primeiro menu de cima, ele vai direto para o ultimo
                       goto menuInicial;
                   }
                   else{
@@ -319,7 +294,7 @@ int TelaMenuInicial(){
               }
                  
               if (tecla == 80){ // 80 é a seta para BAIXO
-                  if (PosicaoSetaEscolha == 16){ 
+                  if (PosicaoSetaEscolha == 18){ 
                       PosicaoSetaEscolha = 12; // Validação se já estiver no ultimo menu de baixo, ele vai direto para o primeiro
                       goto menuInicial;
                   }
@@ -355,11 +330,8 @@ int TelaRegras(){
               
             
         for (x = 56; x > 12; x--){ // laço de repetição para o helicóptero andar na tela   
-             
-            textcolor(2);             
-            gotoxy(comprimento+48,altura-2);printf("  ESC = Voltar\n");  
-            //textcolor(2);  
-            //gotoxy(comprimento+48,altura-1);printf("ENTER = Jogar\n");  
+               
+            BotaoEsc(65,1,true,2);      
             
             textcolor(15);             
             gotoxy(comprimento-10,altura+1);printf("Teclas:\n");
@@ -392,10 +364,8 @@ int TelaRegras(){
             gotoxy(x,y-1); printf("| |");
             gotoxy(x,y);   printf("|_|");             
             
-            gotoxy(12,24); printf("______________________________________________");
-            
-                     
-            
+            gotoxy(12,24); printf("______________________________________________");            
+                                 
             if (cont != 6) // ele contar, hora q chegar em 5 ele irá parar. Isso é qndo o helicóptero chegar na posição certa na tela ele ficar parado.
                 cont += 1;
             
@@ -420,19 +390,30 @@ int TelaRegras(){
 //----------------------------------------------------------------------
 int TelaCreditos(){
 
-    int comprimento = 12, altura = 8;   
-
+    int comprimento = 8, altura = 3, tecla = 0;  
+    bool sair = true;    
+    
     clrscr();
     
+    BotaoEsc(65,1,true,2); 
+    
+    textcolor(15);
     gotoxy(comprimento,altura);  printf("Esse jogo foi baseado no Classic Copter Game para Android.\n");
     gotoxy(comprimento,altura+2);printf("Jogo criado pelo aluno Gustavo Melo Poppi, do curso de  \n");
-    gotoxy(comprimento,altura+4);printf("Análise e Desenvolvimento de Sistemas, que foi ministrado\n");
-    gotoxy(comprimento,altura+6);printf("pelo Professor Edson Moreno na instituição UNICESUMAR, situada\n");
-    gotoxy(comprimento,altura+8);printf("na cidade de Maringá no estado do Paraná.\n");
-    gotoxy(comprimento,altura+12);printf("Esse projeto foi criado para obtenção parcial da nota\n");
-    gotoxy(comprimento,altura+12);printf("do 2º Semestre do curso do ano de 2019.\n");
-    gotoxy(comprimento,altura+14);printf("do ano de 2019.\n");
-
+    gotoxy(comprimento,altura+4);printf("Análise e Desenvolvimento de Sistemas.\n");
+        
+    gotoxy(comprimento,altura+8);printf("Esse projeto foi criado para obtenção parcial da nota\n");
+    gotoxy(comprimento,altura+10);printf("do 2º Semestre da matéria de Algoritmos e Lógica de Programação II, \n");
+    gotoxy(comprimento,altura+12);printf("ministrada pelo Professor Edson Moreno na instituição UNICESUMAR,\n");
+    gotoxy(comprimento,altura+14);printf("situada na cidade de Maringá no estado do Paraná.\n");
+        
+    gotoxy(comprimento,altura+18);printf("Projeto esse que ocorreu no ano de 2019, onde\n");
+    gotoxy(comprimento,altura+20);printf("tinhamos que elaborar qualquer jogo em linguagem C.\n");
+    
+    tecla = getch();
+    
+    if (tecla == 27)
+        RedirecionamentoTelasPelaTeclaDigitada(tecla);    
 }
 
 //----------------------------------------------------------------------
@@ -449,6 +430,9 @@ bool EscolhaOpcaoMenuInicial(int opcaoEscolhida){
          break;
         case 16: // vai para página de CRÉDITOS
             return TelaCreditos();
+         break;
+         case 18: // fecha o jogo
+            exit(0); 
          break;
         default:
         return false;  
@@ -483,15 +467,6 @@ void SetarCorFundo(int corDeFundo){
 }
 
 //----------------------------------------------------------------------
-// Sorteia de x (linha) e y (coluna). x = 78, pois é o valor inicio da direita para esquerda
-void sorteiaAltura(){
-         
-     //x = 78, w = 78;
-     //y = (rand()%24)+1;    
-//     z = (rand()%24)+1;
-}
-
-//----------------------------------------------------------------------
 void Background(int alturaInicia){
      bool zero;     
      
@@ -502,11 +477,6 @@ void Background(int alturaInicia){
          
          // linha de baixo, onde 25 é a altura máxima
          gotoxy(x,(25-alturaInicia-linhaBaixo)); printf("_");
-         
-         
-         // implementar um novo cenário de fundo, sem ser apenas uma reta
-         /*gotoxy(6,5); printf("\\");
-         gotoxy(7,5); printf("_/");*/
      }    
      
 }
@@ -534,7 +504,6 @@ void Barreira(bool reiniciarBarreira){
      if (x < 1 || reiniciarBarreira == true){
         x = 78;
         y = (rand()%24)+1;
-        //sorteiaAltura();
      }    
 }
 
@@ -549,13 +518,7 @@ void Barreira2(bool reiniciarBarreira){
          gotoxy(w,z+1); printf("| |");
          gotoxy(w,z+2); printf("| |");
          gotoxy(w,z+3); printf("|_|");
-         //teste = true;
-//         printf("%d",teste);
-//         Sleep(1000);
      }else{
-           //printf("%d",teste);
-//           Sleep(1000);
-//           teste=false;
          z = (rand()%24)+1;  
      }
      
@@ -579,21 +542,17 @@ bool colisao(){
      
      if ((x >= lin) && (x <= (lin+9))) // +9 pq é o comprimento do helicóptero
      {
-        if (((y >= col) && (y <= (col+2))) || (col >= y && (col) <= y+3))
-       {
-           return true;
-       }    
-     else
+        if (((y >= col) && (y <= (col+2))) || (col >= y && (col) <= y+3))       
+           return true;           
+        else
            return false;
      }  
      
      if ((w >= lin) && (w <= (lin+9)))
      {
-        if (((z >= col) && (z <= (col+2))) || (col >= z && (col) <= z+3))
-       {
-           return true;
-       }    
-     else
+        if (((z >= col) && (z <= (col+2))) || (col >= z && (col) <= z+3))       
+           return true;           
+        else
            return false;
      }          
 }
@@ -610,8 +569,7 @@ void EscritaPontuacaoRecord(bool zerarPontuacao){
     
     pontuacao = pontuacao + 3;
     if (pontuacao >= record )
-       record = pontuacao;    
-    
+       record = pontuacao;        
 }
 
 //----------------------------------------------------------------------
@@ -644,5 +602,13 @@ void desenhoHelicop(int linha , int coluna){
     gotoxy(linha,coluna);   printf("   ________");
     gotoxy(linha,coluna+1); printf("x____.-'-.");
     gotoxy(linha,coluna+2); printf("\"\"___.____)");
+}
+
+//----------------------------------------------------------------------
+void BotaoEsc(int comprimento, int altura, bool cor, int valorTextColor){
+    
+    if (cor)
+       textcolor(valorTextColor);
+    gotoxy(comprimento,altura);printf("  ESC = Voltar\n");
 }
 
