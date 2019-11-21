@@ -1,6 +1,11 @@
 
 /* Jogo copter elaborado por Gustavo Melo Poppi da UNICESUMAR, do curso
-de Análise e Desenvolvimento de Sistemas no 2ºSemestre. Ano de 2019  */
+de Análise e Desenvolvimento de Sistemas no 2ºSemestre. Ano de 2019  
+
+*/
+
+// mudar a cor da letra de digitar o nome, e validar para se não colocar nome ele não deixa passar
+// se apertar ENTER na tela de carregamento ele não ir direto para o jogo
 
 
 /* Bibliotecas usadas no projeto */
@@ -207,10 +212,10 @@ int TelaInicialCarregandoJogo(){
             if (y > 72) // para não quebrar o helicóptero na tela
                 x = 19;
             Sleep(90);         
-            clrscr();
-            //tecla = 0;                        
+            clrscr();tecla = 0; //para se der um ENTER antes da tela de menu não acontecer nada.                        
         }
-    }while(sair);   
+    }while(sair);
+    tecla = 0;            
 }  
     
 //----------------------------------------------------------------------
@@ -397,8 +402,11 @@ int TelaCreditos(){
     gotoxy(comprimento,altura+12);printf("ministrada pelo Professor Edson Moreno na instituição UNICESUMAR,\n");
     gotoxy(comprimento,altura+14);printf("situada na cidade de Maringá no estado do Paraná.\n");
         
-    gotoxy(comprimento,altura+18);printf("Projeto esse que ocorreu no ano de 2019, onde\n");
-    gotoxy(comprimento,altura+20);printf("tinhamos que elaborar qualquer jogo em linguagem C.\n");
+    gotoxy(comprimento,altura+16);printf("Projeto esse que ocorreu no ano de 2019, onde\n");
+    gotoxy(comprimento,altura+18);printf("tinhamos que elaborar qualquer jogo em linguagem C.\n");
+    gotoxy(comprimento,altura+21);printf("Email: gustavopoppi@hotmail.com\n");
+    gotoxy(comprimento,altura+22);printf("Contato: (44)9.9909-0220\n");
+    
     
     tecla = getch();
     
