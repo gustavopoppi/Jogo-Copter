@@ -44,7 +44,7 @@ void SalvarRecord(int leitura);
 /* Variáveis globais */
 char nomeRecord[50];
 int lin = 16, col = 13, record = 0, pontuacao = 0;
-int tecla;
+int tecla = 0;
 int  x, y, w, z, cont;
 bool nuncasair = true;
 char nome[50];
@@ -124,11 +124,10 @@ void ConfiguracoesIniciais(bool primeiraVez){
     setlocale (LC_ALL,"portuguese");
     system("mode 80,25");             
     srand(time(NULL));
-    tecla = 0;
     
     if (primeiraVez == true)
         TelaInicialCarregandoJogo();    
-        
+      
     TelaMenuInicial();
 }
 
@@ -169,15 +168,24 @@ int TelaInicialCarregandoJogo(){
                     gotoxy(1,1);printf("                                                                                \n");  
                     gotoxy(1,2);printf("                                                                                \n");  
                     
+                    textcolor(6);
                     gotoxy(comprimento+18,altura+13);printf("Nome do player: \n"); // msg para digitar o nome do player
                     gotoxy(comprimento+21,altura+14);gets(nome);
                     
                     // validação do tamanho de caracteres do nome digitado.
-                    if (strlen(nome) > 10){
-                        gotoxy(comprimento+10,altura+14);printf("                                                                         ");             
-                        gotoxy(comprimento+10,altura+14);printf("Nome com 10 caracteres no máximo!!\n"); 
-                        Sleep(2000);
-                        gotoxy(comprimento+10,altura+14);printf("                                                                         "); 
+                    if (strlen(nome) > 10 || strlen(nome) == 0){
+                        if(strlen(nome)==0){
+                                gotoxy(comprimento+10,altura+14);printf("                                                                 ");             
+                                gotoxy(comprimento+10,altura+14);printf("Digite um nome para o player!!\n"); 
+                                Sleep(2000);
+                                gotoxy(comprimento+10,altura+14);printf("                                                                 ");   
+                        }
+                        if(strlen(nome) > 10){
+                                gotoxy(comprimento+10,altura+14);printf("                                                                  ");             
+                                gotoxy(comprimento+10,altura+14);printf("Nome com 10 caracteres no máximo!!\n"); 
+                                Sleep(2000);
+                                gotoxy(comprimento+10,altura+14);printf("                                                                   ");    
+                        }                                                                       
                     } 
                     else{
                         gotoxy(comprimento+21,altura+14);printf("                       ");
@@ -212,10 +220,17 @@ int TelaInicialCarregandoJogo(){
             if (y > 72) // para não quebrar o helicóptero na tela
                 x = 19;
             Sleep(90);         
-            clrscr();tecla = 0; //para se der um ENTER antes da tela de menu não acontecer nada.                        
+            clrscr(); 
+            
+            SairTela:
+            if (kbhit()){
+                tecla = getch(); 
+                
+                if (tecla == 13)
+                    tecla = 0;                    
+            }
         }
-    }while(sair);
-    tecla = 0;            
+    }while(sair);     
 }  
     
 //----------------------------------------------------------------------
@@ -231,6 +246,8 @@ int TelaMenuInicial(){
  
     menuInicial:
         clrscr();
+        
+        
         
         textcolor(15);
         gotoxy(10,2);printf("  ______   ______   .______   .__________. _______ .______   \n");
@@ -248,7 +265,7 @@ int TelaMenuInicial(){
         gotoxy(35,18);printf("Sair\n");
     
         gotoxy(11,23);printf("*Desenvolvido por: Gustavo Melo Poppi, 2º Semestre de ADS\n");
-    
+        
     do{           
         if (kbhit()){            
             tecla = getch();    
@@ -397,15 +414,16 @@ int TelaCreditos(){
     gotoxy(comprimento,altura+2);printf("Jogo criado pelo aluno Gustavo Melo Poppi, do curso de  \n");
     gotoxy(comprimento,altura+4);printf("Análise e Desenvolvimento de Sistemas.\n");
         
-    gotoxy(comprimento,altura+8);printf("Esse projeto foi criado para obtenção parcial da nota\n");
-    gotoxy(comprimento,altura+10);printf("do 2º Semestre da matéria de Algoritmos e Lógica de Programação II, \n");
-    gotoxy(comprimento,altura+12);printf("ministrada pelo Professor Edson Moreno na instituição UNICESUMAR,\n");
-    gotoxy(comprimento,altura+14);printf("situada na cidade de Maringá no estado do Paraná.\n");
+    gotoxy(comprimento,altura+7);printf("Esse projeto foi criado para obtenção parcial da nota\n");
+    gotoxy(comprimento,altura+9);printf("do 2º Semestre da matéria de Algoritmos e Lógica de Programação II, \n");
+    gotoxy(comprimento,altura+11);printf("ministrada pelo Professor Edson Moreno na instituição UNICESUMAR,\n");
+    gotoxy(comprimento,altura+13);printf("situada na cidade de Maringá no estado do Paraná.\n");
         
-    gotoxy(comprimento,altura+16);printf("Projeto esse que ocorreu no ano de 2019, onde\n");
-    gotoxy(comprimento,altura+18);printf("tinhamos que elaborar qualquer jogo em linguagem C.\n");
-    gotoxy(comprimento,altura+21);printf("Email: gustavopoppi@hotmail.com\n");
-    gotoxy(comprimento,altura+22);printf("Contato: (44)9.9909-0220\n");
+    gotoxy(comprimento,altura+15);printf("Projeto esse que ocorreu no ano de 2019, onde\n");
+    gotoxy(comprimento,altura+17);printf("tinhamos que elaborar qualquer jogo em linguagem C.\n");
+    gotoxy(comprimento,altura+20);printf("Email: gustavopoppi@hotmail.com\n");
+    gotoxy(comprimento,altura+21);printf("Contato: (44)9.9909-0220\n");
+    gotoxy(comprimento,altura+22);printf("Github: github.com/gustavopoppi/Jogo-Copter \n");
     
     
     tecla = getch();
