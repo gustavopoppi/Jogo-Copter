@@ -1,12 +1,6 @@
 
 /* Jogo copter elaborado por Gustavo Melo Poppi da UNICESUMAR, do curso
-de An·lise e Desenvolvimento de Sistemas no 2∫Semestre. Ano de 2019  
-
-*/
-
-// mudar a cor da letra de digitar o nome, e validar para se n„o colocar nome ele n„o deixa passar
-// se apertar ENTER na tela de carregamento ele n„o ir direto para o jogo
-
+de An√°lise e Desenvolvimento de Sistemas no 2¬∫Semestre. Ano de 2019  */
 
 /* Bibliotecas usadas no projeto */
 #include <stdio.h>
@@ -19,7 +13,7 @@ de An·lise e Desenvolvimento de Sistemas no 2∫Semestre. Ano de 2019
 #include <ctype.h>
 #include <windows.h>
 
-/* DeclaraÁ„o das minhas funÁıes e/ou mÈtodos!!*/
+/* Declara√ß√£o das minhas fun√ß√µes e/ou m√©todos!!*/
 void ConfiguracoesIniciais(bool primeiraVez);
 int TelaInicialCarregandoJogo();
 int TelaMenuInicial();
@@ -41,7 +35,7 @@ void BotaoEsc(int comprimento, int altura, bool cor, int valorTextColor);
 void SalvarRecord(int leitura);
 
 
-/* Vari·veis globais */
+/* Vari√°veis globais */
 char nomeRecord[50];
 int lin = 16, col = 13, record = 0, pontuacao = 0;
 int tecla = 0;
@@ -49,14 +43,14 @@ int  x, y, w, z, cont;
 bool nuncasair = true;
 char nome[50];
 
-/* Vari·veis a respeito da barreira */
+/* Vari√°veis a respeito da barreira */
 int velocidadeBarreira = 50, PontuacaoAumentarVelocidade = 630;
 
-/* Vari·veis a respeito do background */
-bool zero; // Barreira inicial (Background), onde ela n„o pode ser igual a 0
+/* Vari√°veis a respeito do background */
+bool zero; // Barreira inicial (Background), onde ela n√£o pode ser igual a 0
 int sorteio, linhaBaixo;
 
-/* Vari·veis a respeito da tela do carregando jogo */
+/* Vari√°veis a respeito da tela do carregando jogo */
 bool sair; // usei em diversos do e while.
 
 
@@ -78,12 +72,12 @@ int main(){
             
         Sleep(velocidadeBarreira); 
                             
-        // validaÁ„o da colis„o tanto nas barreiras quanto nas linhas de cima ou de baixo. 
+        // valida√ß√£o da colis√£o tanto nas barreiras quanto nas linhas de cima ou de baixo. 
         //|| (!(col > sorteio+1) || !(col + 2 < (26-sorteio-linhaBaixo-1))
         if (colisao()==true ){
             Beep(330,500);                
             Sleep(500);
-            textbackground(0); // 14 È a cor amarela     
+            textbackground(0); // 14 √© a cor amarela     
             EscritaPontuacaoRecord(true);    
             SalvarRecord(1); // salva record  
             lin = 16, col = 13, velocidadeBarreira = 50;
@@ -105,12 +99,12 @@ int main(){
            if (tecla == 224){              
               tecla = getch(); //teclas: 72 cima, 80 baixo
               
-              if(tecla == 72){ // helicÛptero vai para cima
+              if(tecla == 72){ // helic√≥ptero vai para cima
                  col = col - 1;
               }
               
               if (tecla == 80){
-                 col = col + 1; // helicÛptero vai para baixo
+                 col = col + 1; // helic√≥ptero vai para baixo
               }
            }
         }        
@@ -145,7 +139,7 @@ int TelaInicialCarregandoJogo(){
         bool DigitouNome = false, tamanhoNome = false;        
         char situacao[14] = "";
         
-        for (x = 0; x < 78; x++){ // laÁo de repetiÁ„o para o helicÛptero andar na tela
+        for (x = 0; x < 78; x++){ // la√ßo de repeti√ß√£o para o helic√≥ptero andar na tela
             textcolor(15);
             gotoxy(comprimento,altura);printf("         __    ______     ______    ______          \n");
             gotoxy(comprimento,altura+1);printf("        |  |  /  __  \\   /  ____|  /   __ \\       \n");
@@ -163,7 +157,7 @@ int TelaInicialCarregandoJogo(){
             
             
             do{
-                if (!DigitouNome){ // se digitou o nome, n„o entra mais nesses campos, fiz isso pois estou usando o clrscr().
+                if (!DigitouNome){ // se digitou o nome, n√£o entra mais nesses campos, fiz isso pois estou usando o clrscr().
                     textbackground(9);
                     gotoxy(1,1);printf("                                                                                \n");  
                     gotoxy(1,2);printf("                                                                                \n");  
@@ -172,7 +166,7 @@ int TelaInicialCarregandoJogo(){
                     gotoxy(comprimento+18,altura+13);printf("Nome do player: \n"); // msg para digitar o nome do player
                     gotoxy(comprimento+21,altura+14);gets(nome);
                     
-                    // validaÁ„o do tamanho de caracteres do nome digitado.
+                    // valida√ß√£o do tamanho de caracteres do nome digitado.
                     if (strlen(nome) > 10 || strlen(nome) == 0){
                         if(strlen(nome)==0){
                                 gotoxy(comprimento+10,altura+14);printf("                                                                 ");             
@@ -182,7 +176,7 @@ int TelaInicialCarregandoJogo(){
                         }
                         if(strlen(nome) > 10){
                                 gotoxy(comprimento+10,altura+14);printf("                                                                  ");             
-                                gotoxy(comprimento+10,altura+14);printf("Nome com 10 caracteres no m·ximo!!\n"); 
+                                gotoxy(comprimento+10,altura+14);printf("Nome com 10 caracteres no m√°ximo!!\n"); 
                                 Sleep(2000);
                                 gotoxy(comprimento+10,altura+14);printf("                                                                   ");    
                         }                                                                       
@@ -209,15 +203,15 @@ int TelaInicialCarregandoJogo(){
             if (PorcentagemCarregadoTelaInicial>=101.5){
                 x = 79; // sair do for
                 Sleep(500);
-                sair = false; // para sair do laÁo do e while
+                sair = false; // para sair do la√ßo do e while
             }
         
-            /* helicÛptero andando na tela */
+            /* helic√≥ptero andando na tela */
             gotoxy(x,y);   printf("   ________");
             gotoxy(x,y+1); printf("x____.-'-.");
             gotoxy(x,y+2); printf("\"\"___.____)");                  
             
-            if (y > 72) // para n„o quebrar o helicÛptero na tela
+            if (y > 72) // para n√£o quebrar o helic√≥ptero na tela
                 x = 19;
             Sleep(90);         
             clrscr(); 
@@ -240,7 +234,7 @@ int TelaMenuInicial(){
     fflush(stdin);
     sair = true;
     
-    int tecla = 0, PosicaoSetaEscolha = 12; // 12 È aonde comeÁar a minha seta > de escolha 
+    int tecla = 0, PosicaoSetaEscolha = 12; // 12 √© aonde come√ßar a minha seta > de escolha 
     //int b = 1, c = 20; 
     //int x = 14, y = 5; 
  
@@ -261,10 +255,10 @@ int TelaMenuInicial(){
         gotoxy(33,PosicaoSetaEscolha);printf(">");
         gotoxy(35,12);printf("Jogar\n");
         gotoxy(35,14);printf("Regras\n");
-        gotoxy(35,16);printf("CrÈditos\n");
+        gotoxy(35,16);printf("Cr√©ditos\n");
         gotoxy(35,18);printf("Sair\n");
     
-        gotoxy(11,23);printf("*Desenvolvido por: Gustavo Melo Poppi, 2∫ Semestre de ADS\n");
+        gotoxy(11,23);printf("*Desenvolvido por: Gustavo Melo Poppi, 2¬∫ Semestre de ADS\n");
         
     do{           
         if (kbhit()){            
@@ -272,9 +266,9 @@ int TelaMenuInicial(){
             if (tecla == 224){
               tecla = getch(); 
                                          
-              if (tecla == 72){ // 72 È a seta para CIMA
+              if (tecla == 72){ // 72 √© a seta para CIMA
                   if (PosicaoSetaEscolha == 12){ 
-                      PosicaoSetaEscolha = 18; // ValidaÁ„o se j· estiver no primeiro menu de cima, ele vai direto para o ultimo
+                      PosicaoSetaEscolha = 18; // Valida√ß√£o se j√° estiver no primeiro menu de cima, ele vai direto para o ultimo
                       goto menuInicial;
                   }
                   else{
@@ -283,9 +277,9 @@ int TelaMenuInicial(){
                   }
               }
                  
-              if (tecla == 80){ // 80 È a seta para BAIXO
+              if (tecla == 80){ // 80 √© a seta para BAIXO
                   if (PosicaoSetaEscolha == 18){ 
-                      PosicaoSetaEscolha = 12; // ValidaÁ„o se j· estiver no ultimo menu de baixo, ele vai direto para o primeiro
+                      PosicaoSetaEscolha = 12; // Valida√ß√£o se j√° estiver no ultimo menu de baixo, ele vai direto para o primeiro
                       goto menuInicial;
                   }
                   else{  
@@ -295,7 +289,7 @@ int TelaMenuInicial(){
               }   
            }
            
-           if (tecla == 13){ // se der ENTER vai para a funÁ„o 
+           if (tecla == 13){ // se der ENTER vai para a fun√ß√£o 
                EscolhaOpcaoMenuInicial(PosicaoSetaEscolha); // funcao recebe o valor da posicao da seta e retorna alguma tela ou sair = false  
            }
         }    
@@ -310,7 +304,7 @@ void IniciarJogo(){
     
     Barreira(true);
     Barreira2(true);    
-    // sorteio da altura da Barreira inicial (Background), onde ela n„o pode ser igual a 0
+    // sorteio da altura da Barreira inicial (Background), onde ela n√£o pode ser igual a 0
     do{
         zero = false;
         SorteioNum(4);
@@ -318,7 +312,7 @@ void IniciarJogo(){
             zero = true;
         }        
     }while(zero);    
-    linhaBaixo = rand()%2; // sÛ para linha de baixo n„o ficar igual a de cima.            
+    linhaBaixo = rand()%2; // s√≥ para linha de baixo n√£o ficar igual a de cima.            
      
     desenhoHelicop(lin,col);
 }
@@ -339,7 +333,7 @@ int TelaRegras(){
         int comprimento = 17, altura = 3; // comprimento e altura do meu texto      
               
             
-        for (x = 56; x > 12; x--){ // laÁo de repetiÁ„o para o helicÛptero andar na tela   
+        for (x = 56; x > 12; x--){ // la√ßo de repeti√ß√£o para o helic√≥ptero andar na tela   
                
             BotaoEsc(65,1,true,2);      
             
@@ -359,8 +353,8 @@ int TelaRegras(){
             gotoxy(comprimento+10,altura+3);printf("|/__\\|\n");
             
             gotoxy(comprimento-10,altura+6);printf("Regras:\n");
-            gotoxy(comprimento-3,altura+7);printf("VocÍ deve usar as teclas W ou S para desviar das barreias\n");
-            gotoxy(comprimento-3,altura+8);printf("e n„o pode enconstar na linha de cima nem na de baixo\n");
+            gotoxy(comprimento-3,altura+7);printf("Voc√™ deve usar as teclas W ou S para desviar das barreias\n");
+            gotoxy(comprimento-3,altura+8);printf("e n√£o pode enconstar na linha de cima nem na de baixo\n");
             
                      
             gotoxy(12,14); printf("______________________________________________");
@@ -378,7 +372,7 @@ int TelaRegras(){
             
             gotoxy(12,24); printf("______________________________________________");            
                                  
-            if (cont != 6) // ele conta, hora q chegar em 6 ele ir· parar. Isso È qndo o helicÛptero chegar na posiÁ„o certa na tela ele ficar parado.
+            if (cont != 6) // ele conta, hora q chegar em 6 ele ir√° parar. Isso √© qndo o helic√≥ptero chegar na posi√ß√£o certa na tela ele ficar parado.
                 cont += 1;
             
             Sleep(70);
@@ -387,7 +381,7 @@ int TelaRegras(){
                 tecla = getch();   
                 
                 if (tecla == 27){ // ENTER
-                    x = 11; // para sair do laÁo
+                    x = 11; // para sair do la√ßo
                     sair = false;     
                 }        
             }              
@@ -412,12 +406,12 @@ int TelaCreditos(){
     textcolor(15);
     gotoxy(comprimento,altura);  printf("Esse jogo foi baseado no Classic Copter Game para Android.\n");
     gotoxy(comprimento,altura+2);printf("Jogo criado pelo aluno Gustavo Melo Poppi, do curso de  \n");
-    gotoxy(comprimento,altura+4);printf("An·lise e Desenvolvimento de Sistemas.\n");
+    gotoxy(comprimento,altura+4);printf("An√°lise e Desenvolvimento de Sistemas.\n");
         
-    gotoxy(comprimento,altura+7);printf("Esse projeto foi criado para obtenÁ„o parcial da nota\n");
-    gotoxy(comprimento,altura+9);printf("do 2∫ Semestre da matÈria de Algoritmos e LÛgica de ProgramaÁ„o II, \n");
-    gotoxy(comprimento,altura+11);printf("ministrada pelo Professor Edson Moreno na instituiÁ„o UNICESUMAR,\n");
-    gotoxy(comprimento,altura+13);printf("situada na cidade de Maring· no estado do Paran·.\n");
+    gotoxy(comprimento,altura+7);printf("Esse projeto foi criado para obten√ß√£o parcial da nota\n");
+    gotoxy(comprimento,altura+9);printf("do 2¬∫ Semestre da mat√©ria de Algoritmos e L√≥gica de Programa√ß√£o II, \n");
+    gotoxy(comprimento,altura+11);printf("ministrada pelo Professor Edson Moreno na institui√ß√£o UNICESUMAR,\n");
+    gotoxy(comprimento,altura+13);printf("situada na cidade de Maring√° no estado do Paran√°.\n");
         
     gotoxy(comprimento,altura+15);printf("Projeto esse que ocorreu no ano de 2019, onde\n");
     gotoxy(comprimento,altura+17);printf("tinhamos que elaborar qualquer jogo em linguagem C.\n");
@@ -441,10 +435,10 @@ bool EscolhaOpcaoMenuInicial(int opcaoEscolhida){
             ContagemRegressiva(33,11,"Iniciando em:",true,0); // Contagem antes de inicia o jogo
             return sair = false;
          break;
-        case 14: // vai para p·gina de REGRAS
+        case 14: // vai para p√°gina de REGRAS
             return TelaRegras();
          break;
-        case 16: // vai para p·gina de CR…DITOS
+        case 16: // vai para p√°gina de CR√âDITOS
             return TelaCreditos();
          break;
          case 18: // fecha o jogo
@@ -458,7 +452,7 @@ bool EscolhaOpcaoMenuInicial(int opcaoEscolhida){
 //----------------------------------------------------------------------
 int SorteioNum(int var){
     
-    sorteio = rand()%var; // aqui que faÁo o sorteio da altura da linha do campo 
+    sorteio = rand()%var; // aqui que fa√ßo o sorteio da altura da linha do campo 
     return sorteio;
 }  
 
@@ -478,14 +472,14 @@ void RedirecionamentoTeclaDigitada(int tecla){
 }
 
 //----------------------------------------------------------------------
-void Background(int alturaInicia){ // criaÁ„o das minhas linhas de cima e de baixo    
+void Background(int alturaInicia){ // cria√ß√£o das minhas linhas de cima e de baixo    
      
      for (int x = 1; x<80; x++){
          
-         // linha da cima, o +1 È para nunca comeÁar com a linha tamanho 1, pois se n„o ir· ter conflito com o texto
+         // linha da cima, o +1 √© para nunca come√ßar com a linha tamanho 1, pois se n√£o ir√° ter conflito com o texto
          gotoxy(x,alturaInicia+1); printf("_");
          
-         // linha de baixo, onde 25 È a altura m·xima
+         // linha de baixo, onde 25 √© a altura m√°xima
          gotoxy(x,(25-alturaInicia-linhaBaixo)); printf("_");
      }       
 }
@@ -495,7 +489,7 @@ void Barreira(bool reiniciarBarreira){
      
      textcolor(15); // cor branca
      
-     // CondiÁıes para estar dentro do "mapa", caso contr·rio ele sorteio de novo
+     // Condi√ß√µes para estar dentro do "mapa", caso contr√°rio ele sorteio de novo
      if ((y > sorteio) && (y + 3 < (25-sorteio-linhaBaixo-1))){ 
          gotoxy(x,y);   printf(" _");
          gotoxy(x,y+1); printf("| |");
@@ -509,7 +503,7 @@ void Barreira(bool reiniciarBarreira){
      x --;
      
      // Se o valor do X for menor que 0 ele passa fora da tela
-     // o reniciar barreira È porque tava tendo problema quando batia e reniciava
+     // o reniciar barreira √© porque tava tendo problema quando batia e reniciava
      if (x < 1 || reiniciarBarreira == true){
         x = 78;
         y = (rand()%24)+1;
@@ -521,7 +515,7 @@ void Barreira2(bool reiniciarBarreira){
      
      textcolor(15); // cor branca
      
-     // CondiÁıes para estar dentro do "mapa"
+     // Condi√ß√µes para estar dentro do "mapa"
      if ((z > sorteio) && (z + 3 < (25-sorteio-linhaBaixo-1))){ 
          gotoxy(w,z);   printf(" _");
          gotoxy(w,z+1); printf("| |");
@@ -544,12 +538,12 @@ void Barreira2(bool reiniciarBarreira){
 //----------------------------------------------------------------------
 bool colisao(){
      
-     // x È o valor sorteado no plano X (comprimento)
-     // y È o valor sorteado no plano Y (altura)
-     // lin È a linha do helicÛptero
-     // col È a coluna do helicÛptero
+     // x √© o valor sorteado no plano X (comprimento)
+     // y √© o valor sorteado no plano Y (altura)
+     // lin √© a linha do helic√≥ptero
+     // col √© a coluna do helic√≥ptero
      
-     // +9 pq È o comprimento do helicÛptero
+     // +9 pq √© o comprimento do helic√≥ptero
      if ((x >= lin) && (x <= (lin+9)))
      {
         if (((y >= col) && (y <= (col+2))) || (col >= y && (col) <= y+3))       
@@ -566,7 +560,7 @@ bool colisao(){
            return false;
      }       
      
-     // verificaÁ„o de colis„o da linha de cima ou de baixo
+     // verifica√ß√£o de colis√£o da linha de cima ou de baixo
      if (!(col > sorteio+1) || !(col + 2 < (26-sorteio-linhaBaixo-1)))
         return true;
      else
@@ -581,10 +575,10 @@ void EscritaPontuacaoRecord(bool zerarPontuacao){
         
     gotoxy(2,1); printf("Player: %s",nome);
     gotoxy(2,2); printf("Velocidade: %d",velocidadeBarreira-49+cont);    
-    gotoxy(35,1); printf("PontuaÁ„o: %d",pontuacao);
+    gotoxy(35,1); printf("Pontua√ß√£o: %d",pontuacao);
     gotoxy(35,2); printf("Record: %s - %d pontos",nomeRecord,record);
     
-    //cont += 1; // var velocidade vai cair de 3 em 3, ent„o somei 6 para na tela aumentar e n„o diminuir o valor
+    //cont += 1; // var velocidade vai cair de 3 em 3, ent√£o somei 6 para na tela aumentar e n√£o diminuir o valor
     
     pontuacao = pontuacao + 3;
     if (pontuacao >= record ){
@@ -602,7 +596,7 @@ void ContagemRegressiva(int posicaoX, int posicaoY, char msg[50], bool contagemR
     clrscr();
     gotoxy(posicaoX,posicaoY); printf("%s",msg);
     
-    if (contagemRegressiva){ // caso queira a contagem, caso contr·rio sÛ ir· apresentar a mensagem
+    if (contagemRegressiva){ // caso queira a contagem, caso contr√°rio s√≥ ir√° apresentar a mensagem
         do{
             for (int x = 3 ; x >= 1; x--){
                 gotoxy(39,12); printf("%d",x);   
